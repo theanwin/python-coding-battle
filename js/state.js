@@ -130,23 +130,16 @@ class StateManager {
       if (localTeam) return localTeam;
     }
 
-    // 2. Try server API /api/teams/verify with safe Content-Type check
-    try {
-      const res = await fetch('/api/teams/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ teamId, accessCode: cleanCode }),
-      });
-
-      const contentType = res.headers.get("content-type") || "";
-      if (res.ok && contentType.includes("application/json")) {
-        const data = await res.json();
-        if (data && data.team) {
-          return data.team;
+    // 2. Check current session storage
+    const curRaw = localStorage.getItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM);
+    if (curRaw) {
+      try {
+        const parsed = JSON.parse(curRaw);
+        if ((cleanCode && (parsed.access_code || '').trim().toUpperCase() === cleanCode) ||
+            (teamId && parsed.id === teamId)) {
+          return parsed;
         }
-      }
-    } catch (apiErr) {
-      console.warn("API verify endpoint error, falling back:", apiErr);
+      } catch (e) {}
     }
 
     // 3. Fallback: check all teams via getTeams()
@@ -158,7 +151,7 @@ class StateManager {
 
     if (match) return match;
 
-    throw new Error(`Team not found. Please verify your access code "${cleanCode || teamId}" or register your team first.`);
+    throw new Error(`Team not found with code "${cleanCode || teamId}". Please verify your access code or register your team first.`);
   }
 
   async registerTeam(teamData) {

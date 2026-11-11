@@ -1,6 +1,6 @@
 /**
  * VERCEL SERVERLESS FUNCTION: /api/teams
- * Handles team listing and registration on server.
+ * Handles team listing, registration, and verification on server.
  */
 
 // In-memory store for serverless instance lifecycle
@@ -13,13 +13,14 @@ export default async function handler(req, res) {
 
   if (req.method === "OPTIONS") return res.status(200).end();
 
-  // If Supabase is configured via server environment variables, proxy to Supabase
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  const isSupabase = SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes("your-project");
 
-  if (SUPABASE_URL && SUPABASE_KEY && !SUPABASE_URL.includes("your-project")) {
-    try {
-      if (req.method === "GET") {
+  // GET: Return all teams
+  if (req.method === "GET") {
+    if (isSupabase) {
+      try {
         const fetchRes = await fetch(`${SUPABASE_URL}/rest/v1/teams?select=*&order=total_points.desc,last_submission_at.asc`, {
           headers: {
             "apikey": SUPABASE_KEY,
@@ -30,8 +31,61 @@ export default async function handler(req, res) {
           const data = await fetchRes.json();
           return res.status(200).json(data);
         }
-      } else if (req.method === "POST") {
-        const teamData = req.body;
+      } catch (e) {
+        console.warn("Supabase teams fetch error:", e);
+      }
+    }
+    return res.status(200).json(teamsMemory);
+  }
+
+  // POST: Register or Verify
+  if (req.method === "POST") {
+    const body = typeof req.body === "string" ? JSON.parse(req.body || "{}") : (req.body || {});
+
+    // Action: Verify team
+    if (body.action === "verify" || body.accessCode) {
+      const code = (body.accessCode || "").trim().toUpperCase();
+      const id = body.teamId;
+
+      if (isSupabase) {
+        try {
+          let url = `${SUPABASE_URL}/rest/v1/teams?select=*`;
+          if (id) url += `&id=eq.${id}`;
+          else if (code) url += `&access_code=ilike.${code}`;
+
+          const r = await fetch(url, {
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${SUPABASE_KEY}`,
+            },
+          });
+          if (r.ok) {
+            const list = await r.json();
+            if (Array.isArray(list) && list.length > 0) {
+              return res.status(200).json({ success: true, team: list[0] });
+            }
+          }
+        } catch (e) {}
+      }
+
+      const match = teamsMemory.find(t => 
+        (code && (t.access_code || "").trim().toUpperCase() === code) ||
+        (id && t.id === id)
+      );
+      if (match) {
+        return res.status(200).json({ success: true, team: match });
+      }
+      return res.status(404).json({ error: "Team not found on server" });
+    }
+
+    // Action: Register new team
+    const newTeam = body;
+    if (!newTeam || !newTeam.name) {
+      return res.status(400).json({ error: "Invalid team data" });
+    }
+
+    if (isSupabase) {
+      try {
         const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/teams`, {
           method: "POST",
           headers: {
@@ -40,28 +94,18 @@ export default async function handler(req, res) {
             "Content-Type": "application/json",
             "Prefer": "return=representation",
           },
-          body: JSON.stringify(teamData),
+          body: JSON.stringify(newTeam),
         });
         if (insertRes.ok) {
           const inserted = await insertRes.json();
           return res.status(201).json(inserted[0] || inserted);
         }
+      } catch (e) {
+        console.warn("Supabase register error:", e);
       }
-    } catch (e) {
-      console.warn("Supabase API error, using memory fallback:", e);
     }
-  }
 
-  // Memory fallback
-  if (req.method === "GET") {
-    // Return empty array initially if no teams registered!
-    return res.status(200).json(teamsMemory);
-  } else if (req.method === "POST") {
-    const newTeam = req.body;
-    if (!newTeam || !newTeam.name) {
-      return res.status(400).json({ error: "Invalid team data" });
-    }
-    // Check duplicate
+    // Memory save
     if (teamsMemory.some(t => t.name.toLowerCase() === newTeam.name.toLowerCase())) {
       return res.status(409).json({ error: "Team name already taken" });
     }
