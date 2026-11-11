@@ -28,13 +28,32 @@ class CompetitionController {
 
   async init() {
     // 1. Check if a team is already selected in local session
-    const storedTeam = localStorage.getItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM);
+    let storedTeam = localStorage.getItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM);
+    
+    // Fallback: If not in current team session, pick the latest registered local team
+    if (!storedTeam) {
+      const localTeamsRaw = localStorage.getItem(window.APP_CONFIG.STORAGE_KEYS.LOCAL_TEAMS);
+      if (localTeamsRaw) {
+        try {
+          const list = JSON.parse(localTeamsRaw);
+          if (Array.isArray(list) && list.length > 0) {
+            storedTeam = JSON.stringify(list[list.length - 1]);
+            localStorage.setItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM, storedTeam);
+          }
+        } catch (e) {}
+      }
+    }
+
     if (storedTeam) {
       try {
         const parsed = JSON.parse(storedTeam);
         try {
-          const fresh = await window.stateManager.getTeamById(parsed.id);
-          this.currentTeam = fresh || parsed;
+          if (window.stateManager && window.stateManager.getTeamById) {
+            const fresh = await window.stateManager.getTeamById(parsed.id);
+            this.currentTeam = fresh || parsed;
+          } else {
+            this.currentTeam = parsed;
+          }
         } catch (e) {
           this.currentTeam = parsed;
         }
@@ -53,65 +72,13 @@ class CompetitionController {
   }
 
   // -------------------------------------------------------------
-  // TEAM ENTRY & SELECTION
+  // TEAM ENTRY & SELECTION (Prompt to register if no team exists)
   // -------------------------------------------------------------
   showEntryScreen() {
     document.getElementById("comp-entry-view").style.display = "block";
     document.getElementById("comp-lobby-view").style.display = "none";
     document.getElementById("comp-active-view").style.display = "none";
     document.getElementById("comp-timer-header").style.display = "none";
-
-    const entryForm = document.getElementById("team-entry-form");
-    if (entryForm) {
-      entryForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const codeInput = document.getElementById("entry-access-code").value.trim().toUpperCase();
-        if (!codeInput) {
-          window.Notifier.error("Please enter your Team Access Code (e.g. PCB-1234).");
-          return;
-        }
-
-        try {
-          let team = await window.stateManager.getTeamByCode(codeInput);
-
-          if (!team) {
-            // Check session current team
-            const curRaw = localStorage.getItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM);
-            if (curRaw) {
-              try {
-                const parsed = JSON.parse(curRaw);
-                if ((parsed.access_code || "").trim().toUpperCase() === codeInput) {
-                  team = parsed;
-                }
-              } catch (e) {}
-            }
-          }
-
-          if (!team) {
-            // Check all local teams
-            const localTeamsRaw = localStorage.getItem(window.APP_CONFIG.STORAGE_KEYS.LOCAL_TEAMS);
-            if (localTeamsRaw) {
-              try {
-                const list = JSON.parse(localTeamsRaw);
-                team = list.find(t => (t.access_code || "").trim().toUpperCase() === codeInput);
-              } catch (e) {}
-            }
-          }
-
-          if (!team) {
-            window.Notifier.error(`No registered team found with access code "${codeInput}". Please check your code or register on the Register page.`);
-            return;
-          }
-
-          this.currentTeam = team;
-          localStorage.setItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM, JSON.stringify(team));
-          window.Notifier.success(`Team "${team.name}" verified! Entering competition...`);
-          this.handleTeamLoaded();
-        } catch (err) {
-          window.Notifier.error(err.message || `Could not verify access code. Please try again.`);
-        }
-      });
-    }
   }
 
   handleTeamLoaded() {
@@ -130,19 +97,26 @@ class CompetitionController {
     document.getElementById("comp-active-view").style.display = "none";
     document.getElementById("comp-timer-header").style.display = "none";
 
-    document.getElementById("lobby-team-name").textContent = this.currentTeam.name;
-    document.getElementById("lobby-team-dept").textContent = this.currentTeam.department;
-    document.getElementById("lobby-access-code").textContent = this.currentTeam.access_code;
+    const nameEl = document.getElementById("lobby-team-name");
+    if (nameEl) nameEl.textContent = this.currentTeam.name;
+
+    const deptEl = document.getElementById("lobby-team-dept");
+    if (deptEl) deptEl.textContent = this.currentTeam.department;
+
+    const codeEl = document.getElementById("lobby-access-code");
+    if (codeEl) codeEl.textContent = this.currentTeam.access_code || "";
 
     // Render team members
     const membersList = document.getElementById("lobby-members-list");
-    membersList.innerHTML = `
-      <span class="member-chip">👑 Leader: ${this.currentTeam.leader}</span>
-      <span class="member-chip">${this.currentTeam.member2}</span>
-      <span class="member-chip">${this.currentTeam.member3}</span>
-      <span class="member-chip">${this.currentTeam.member4}</span>
-      ${this.currentTeam.member5 ? `<span class="member-chip">${this.currentTeam.member5}</span>` : ""}
-    `;
+    if (membersList) {
+      membersList.innerHTML = `
+        <span class="member-chip">👑 Leader: ${this.currentTeam.leader}</span>
+        <span class="member-chip">${this.currentTeam.member2}</span>
+        <span class="member-chip">${this.currentTeam.member3}</span>
+        <span class="member-chip">${this.currentTeam.member4}</span>
+        ${this.currentTeam.member5 ? `<span class="member-chip">${this.currentTeam.member5}</span>` : ""}
+      `;
+    }
 
     const startBtn = document.getElementById("start-competition-btn");
     startBtn.onclick = async () => {

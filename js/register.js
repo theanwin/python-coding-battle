@@ -63,16 +63,20 @@ document.addEventListener("DOMContentLoaded", () => {
       // Save as active team in local session
       localStorage.setItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM, JSON.stringify(createdTeam));
 
-      // Show success confirmation
-      formCard.style.display = "none";
-      successCard.style.display = "block";
+      if (formCard) formCard.style.display = "none";
+      if (successCard) {
+        successCard.style.display = "block";
+        const nameEl = document.getElementById("registered-team-name");
+        if (nameEl) nameEl.textContent = createdTeam.name;
+      }
 
-      document.getElementById("registered-team-name").textContent = createdTeam.name;
-      document.getElementById("registered-access-code").textContent = createdTeam.access_code;
-      document.getElementById("registered-leader").textContent = createdTeam.leader;
-      document.getElementById("registered-dept").textContent = createdTeam.department;
+      submitBtn.innerHTML = `✓ Registered! Entering Competition Arena...`;
+      window.Notifier.success(`Team "${createdTeam.name}" registered! Entering competition...`);
 
-      window.Notifier.success(`Team "${createdTeam.name}" registered successfully!`);
+      // Immediately enter the competition arena directly!
+      setTimeout(() => {
+        window.location.href = "competition.html";
+      }, 400);
     } catch (err) {
       console.error(err);
       window.Notifier.error(err.message || "Failed to register team. Please try again.");

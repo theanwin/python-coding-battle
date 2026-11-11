@@ -56,30 +56,25 @@
     <div class="container">
 
       <!-- ============================================================
-           VIEW 1: TEAM SIGN-IN / CODE ENTRY SCREEN
+           VIEW 1: NO TEAM FOUND / PROMPT TO REGISTER
            ============================================================ -->
       <div id="comp-entry-view" style="display: none; padding: 60px 0;">
-        <div class="card" style="max-width: 480px; margin: 0 auto; padding: 40px 32px; text-align: center;">
-          <div style="font-size: 2.5rem; margin-bottom: 12px;">⚡</div>
-          <h1 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 8px;">Enter Competition</h1>
-          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 28px;">
-            Enter your team's unique access code to access your team lobby.
+        <div class="card" style="max-width: 500px; margin: 0 auto; padding: 44px 32px; text-align: center;">
+          <div style="font-size: 2.8rem; margin-bottom: 14px;">⚡</div>
+          <span class="badge badge-indigo" style="margin-bottom: 12px;">Python Coding Battle</span>
+          <h1 style="font-size: 1.85rem; font-weight: 700; margin-bottom: 8px;">Ready to Compete?</h1>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5; margin-bottom: 30px;">
+            You need a registered team (4–5 members) to enter the competition arena. Create your team below to start immediately!
           </p>
 
-          <form id="team-entry-form">
-            <div class="form-group" style="text-align: left;">
-              <label class="form-label" for="entry-access-code">Team Access Code</label>
-              <input type="text" id="entry-access-code" class="form-input" placeholder="e.g. PCB-8492" required style="font-family: var(--font-mono); font-size: 1.1rem; text-transform: uppercase;">
-              <div class="form-hint">Provided when your team was registered.</div>
-            </div>
+          <a href="register.html" class="btn btn-accent btn-lg" style="width: 100%; font-size: 1.05rem;">
+            Register Your Team & Enter Arena ⚡
+          </a>
 
-            <button type="submit" class="btn btn-accent btn-lg" style="width: 100%;">
-              Enter Arena ⚡
-            </button>
-          </form>
-
-          <div style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted);">
-            Don't have a team yet? <a href="register.html" style="color: var(--accent-primary); font-weight: 600;">Register your team here</a>.
+          <div style="margin-top: 20px;">
+            <a href="index.html" class="btn btn-secondary btn-sm">
+              Back to Home
+            </a>
           </div>
         </div>
       </div>
