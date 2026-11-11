@@ -228,6 +228,14 @@ app.post('/api/submit', async (req, res) => {
     return res.status(400).json({ error: "Missing required submission fields" });
   }
 
+  // Strict server-side check: Team must exist on the server
+  const existingTeam = db.getTeamById(teamId);
+  if (!existingTeam) {
+    return res.status(403).json({
+      error: "Unauthorized: Team has not been created on the server. You must register your team first."
+    });
+  }
+
   let passed = false;
   let pointsAwarded = 0;
   let testResults = [];
@@ -359,9 +367,55 @@ app.post('/api/teams', (req, res) => {
   }
 });
 
+// Verification endpoint: Validates whether a team actually exists on the server
+app.post('/api/teams/verify', (req, res) => {
+  const { teamId, accessCode, teamName } = req.body || {};
+  let team = null;
+
+  if (teamId) team = db.getTeamById(teamId);
+  if (!team && accessCode) team = db.getTeamByCode(accessCode);
+  if (!team && teamName) {
+    team = db.getTeams().find(t => t.name.toLowerCase() === teamName.trim().toLowerCase());
+  }
+
+  if (!team) {
+    return res.status(403).json({
+      success: false,
+      error: "Team has not been created on the server. You must create and register your team first before joining the competition."
+    });
+  }
+
+  res.json({ success: true, team });
+});
+
+// Join endpoint: Requires team to exist on the server
+app.post('/api/teams/join', (req, res) => {
+  const { accessCode, teamId } = req.body || {};
+  let team = null;
+
+  if (teamId) team = db.getTeamById(teamId);
+  if (!team && accessCode) team = db.getTeamByCode(accessCode);
+
+  if (!team) {
+    return res.status(403).json({
+      success: false,
+      error: "No matching team found on the server. Please register your team first to join the competition."
+    });
+  }
+
+  res.json({ success: true, team });
+});
+
 app.post('/api/timer', (req, res) => {
   const { action, teamId } = req.body || {};
   if (action === 'start' && teamId) {
+    // Strict server-side check: Team must exist on the server
+    const existing = db.getTeamById(teamId);
+    if (!existing) {
+      return res.status(403).json({
+        error: "Unauthorized: Team has not been created on the server. You must register your team first."
+      });
+    }
     const team = db.startTeamCompetition(teamId);
     if (!team) return res.status(404).json({ error: "Team not found" });
     return res.json(team);

@@ -118,6 +118,23 @@ class StateManager {
     return teams.find(t => (t.access_code || '').toUpperCase() === cleanCode) || null;
   }
 
+  async verifyTeamOnServer(teamId, accessCode) {
+    try {
+      const res = await fetch('/api/teams/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ teamId, accessCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Team not found on the server. Please register your team first.");
+      }
+      return data.team;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async registerTeam(teamData) {
     // Generate unique access code: e.g. PCB-7821
     const accessCode = 'PCB-' + Math.floor(1000 + Math.random() * 9000);

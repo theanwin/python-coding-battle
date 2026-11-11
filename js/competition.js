@@ -32,12 +32,15 @@ class CompetitionController {
     if (storedTeam) {
       try {
         const parsed = JSON.parse(storedTeam);
-        // Fetch fresh copy from database
-        const fresh = await window.stateManager.getTeamById(parsed.id);
-        if (fresh) {
+        // Verify with the server that this team actually exists on the server!
+        try {
+          const fresh = await window.stateManager.verifyTeamOnServer(parsed.id);
           this.currentTeam = fresh;
-        } else {
-          this.currentTeam = parsed;
+          localStorage.setItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM, JSON.stringify(fresh));
+        } catch (serverErr) {
+          console.warn("Team in session was not found on the server:", serverErr.message);
+          this.currentTeam = null;
+          localStorage.removeItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM);
         }
       } catch (e) {
         this.currentTeam = null;
@@ -72,15 +75,16 @@ class CompetitionController {
           return;
         }
 
-        const team = await window.stateManager.getTeamByCode(codeInput);
-        if (!team) {
-          window.Notifier.error(`No registered team found with access code "${codeInput}". Please check and try again.`);
-          return;
+        try {
+          // Strictly verify team exists on server before entering
+          const team = await window.stateManager.verifyTeamOnServer(null, codeInput);
+          this.currentTeam = team;
+          localStorage.setItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM, JSON.stringify(team));
+          window.Notifier.success(`Team "${team.name}" verified on server! Entering competition...`);
+          this.handleTeamLoaded();
+        } catch (err) {
+          window.Notifier.error(err.message || `No registered team found with access code "${codeInput}". You must create a team first.`);
         }
-
-        this.currentTeam = team;
-        localStorage.setItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM, JSON.stringify(team));
-        this.handleTeamLoaded();
       });
     }
   }
@@ -118,9 +122,10 @@ class CompetitionController {
     const startBtn = document.getElementById("start-competition-btn");
     startBtn.onclick = async () => {
       startBtn.disabled = true;
-      startBtn.innerHTML = `Starting Competition...`;
+      startBtn.innerHTML = `Verifying with server...`;
 
       try {
+        await window.stateManager.verifyTeamOnServer(this.currentTeam.id);
         const updated = await window.stateManager.startTeamCompetition(this.currentTeam.id);
         if (updated) this.currentTeam = updated;
         localStorage.setItem(window.APP_CONFIG.STORAGE_KEYS.CURRENT_TEAM, JSON.stringify(this.currentTeam));

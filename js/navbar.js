@@ -51,6 +51,17 @@ document.addEventListener("DOMContentLoaded", () => {
     </nav>
   `;
 
+  // Intercept competition links to ensure team is created first
+  document.querySelectorAll('a[href="competition.html"]').forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const storedTeam = localStorage.getItem("pcb_current_team");
+      if (!storedTeam) {
+        e.preventDefault();
+        window.location.href = "register.html?reason=must_create_team";
+      }
+    });
+  });
+
   // Mobile menu toggle
   const mobileToggle = document.getElementById("mobile-toggle");
   const mobileMenu = document.getElementById("mobile-menu");

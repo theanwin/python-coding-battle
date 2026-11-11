@@ -11,6 +11,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!form) return;
 
+  // Show notice if redirected because user tried to join competition without a team
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("reason") === "must_create_team") {
+    const notice = document.createElement("div");
+    notice.style.marginBottom = "20px";
+    notice.style.padding = "14px 18px";
+    notice.style.borderRadius = "var(--radius-md, 12px)";
+    notice.style.background = "#eff6ff";
+    notice.style.border = "1px solid #bfdbfe";
+    notice.style.color = "#1e40af";
+    notice.style.fontSize = "0.88rem";
+    notice.style.lineHeight = "1.5";
+    notice.innerHTML = `<strong>⚡ Team Creation Required:</strong> You must create and register your team on the server before joining the competition arena. Complete the roster below to start competing.`;
+    form.parentNode.insertBefore(notice, form);
+  }
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
