@@ -119,20 +119,46 @@ class StateManager {
   }
 
   async verifyTeamOnServer(teamId, accessCode) {
+    const cleanCode = (accessCode || '').trim().toUpperCase();
+
+    // 1. Check local state / cache first
+    if (cleanCode) {
+      const localTeam = await this.getTeamByCode(cleanCode);
+      if (localTeam) return localTeam;
+    } else if (teamId) {
+      const localTeam = await this.getTeamById(teamId);
+      if (localTeam) return localTeam;
+    }
+
+    // 2. Try server API /api/teams/verify with safe Content-Type check
     try {
       const res = await fetch('/api/teams/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ teamId, accessCode }),
+        body: JSON.stringify({ teamId, accessCode: cleanCode }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Team not found on the server. Please register your team first.");
+
+      const contentType = res.headers.get("content-type") || "";
+      if (res.ok && contentType.includes("application/json")) {
+        const data = await res.json();
+        if (data && data.team) {
+          return data.team;
+        }
       }
-      return data.team;
-    } catch (err) {
-      throw err;
+    } catch (apiErr) {
+      console.warn("API verify endpoint error, falling back:", apiErr);
     }
+
+    // 3. Fallback: check all teams via getTeams()
+    const allTeams = await this.getTeams();
+    const match = allTeams.find(t => 
+      (cleanCode && (t.access_code || '').trim().toUpperCase() === cleanCode) ||
+      (teamId && t.id === teamId)
+    );
+
+    if (match) return match;
+
+    throw new Error(`Team not found. Please verify your access code "${cleanCode || teamId}" or register your team first.`);
   }
 
   async registerTeam(teamData) {
