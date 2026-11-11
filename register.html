@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Team | PYTHON CODING BATTLE ⚡</title>
+  <meta name="description" content="Register your 4-5 member team for the Python Coding Battle.">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'><path d='M13 2L3 14h9l-1 8 10-12h-9l1-8z'/></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div id="site-navbar"></div>
+
+  <main class="main-content">
+    <div class="container container-narrow" style="padding-top: 40px; padding-bottom: 60px;">
+      
+      <!-- Registration Form Card -->
+      <div class="card" id="registration-form-card" style="padding: 36px 32px;">
+        <div style="text-align: center; margin-bottom: 28px;">
+          <span class="badge badge-indigo" style="margin-bottom: 10px;">Inter-Team Competition</span>
+          <h1 style="font-size: 2rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 6px;">Register Your Team</h1>
+          <p style="color: var(--text-muted); font-size: 0.92rem;">
+            Teams must consist of 4 to 5 first-year college members. Fill out all required fields below.
+          </p>
+        </div>
+
+        <form id="team-register-form">
+          <!-- Team Name -->
+          <div class="form-group">
+            <label class="form-label" for="team-name">Team Name <span class="required">*</span></label>
+            <input type="text" id="team-name" class="form-input" placeholder="e.g. Turing Titans, Binary Pythons" required autocomplete="off">
+            <div class="form-hint">Must be unique across the competition.</div>
+          </div>
+
+          <!-- Department -->
+          <div class="form-group">
+            <label class="form-label" for="department">Department / Branch <span class="required">*</span></label>
+            <input type="text" id="department" class="form-input" placeholder="e.g. Computer Science, AI & DS, IT, ECE" required>
+          </div>
+
+          <!-- Members Grid -->
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="team-leader">Team Leader (Member 1) <span class="required">*</span></label>
+              <input type="text" id="team-leader" class="form-input" placeholder="Full Name" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="member-2">Team Member 2 <span class="required">*</span></label>
+              <input type="text" id="member-2" class="form-input" placeholder="Full Name" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="member-3">Team Member 3 <span class="required">*</span></label>
+              <input type="text" id="member-3" class="form-input" placeholder="Full Name" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="member-4">Team Member 4 <span class="required">*</span></label>
+              <input type="text" id="member-4" class="form-input" placeholder="Full Name" required>
+            </div>
+          </div>
+
+          <!-- Optional Member 5 -->
+          <div class="form-group">
+            <label class="form-label" for="member-5">Team Member 5 <span style="font-weight: 400; color: var(--text-muted);">(Optional — for teams of 5)</span></label>
+            <input type="text" id="member-5" class="form-input" placeholder="Full Name (leave empty if team has 4 members)">
+          </div>
+
+          <div style="margin-top: 30px;">
+            <button type="submit" id="register-submit-btn" class="btn btn-accent btn-lg" style="width: 100%;">
+              Register Team & Generate Access Code ⚡
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Registration Success Card (Hidden by default) -->
+      <div class="card" id="registration-success-card" style="display: none; padding: 44px 32px; text-align: center;">
+        <div style="width: 56px; height: 56px; border-radius: var(--radius-full); background: var(--success-bg); color: var(--success); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 1.6rem;">
+          ✓
+        </div>
+        
+        <span class="badge badge-success" style="margin-bottom: 12px;">Registration Confirmed</span>
+        <h2 style="font-size: 1.8rem; margin-bottom: 8px;" id="registered-team-name">Team Name</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 28px;">
+          Your team is officially registered for the Python Coding Battle! Save your unique access code below to enter the competition.
+        </p>
+
+        <!-- Access Code Highlight Box -->
+        <div style="background: var(--bg-secondary); border: 2px dashed var(--accent-border); border-radius: var(--radius-lg); padding: 24px; max-width: 420px; margin: 0 auto 30px;">
+          <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 6px;">
+            YOUR TEAM ACCESS CODE
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 2.2rem; font-weight: 800; color: var(--accent-primary); letter-spacing: 0.05em; margin-bottom: 12px;" id="registered-access-code">
+            PCB-0000
+          </div>
+          <button id="copy-code-btn" class="btn btn-secondary btn-sm">
+            Copy Access Code 📋
+          </button>
+        </div>
+
+        <div style="background: var(--bg-tertiary); border-radius: var(--radius-md); padding: 14px; max-width: 420px; margin: 0 auto 30px; font-size: 0.85rem; text-align: left;">
+          <div><strong>Department:</strong> <span id="registered-dept"></span></div>
+          <div><strong>Team Leader:</strong> <span id="registered-leader"></span></div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;">
+          <a href="competition.html" class="btn btn-primary btn-lg">
+            Proceed to Competition Lobby ⚡
+          </a>
+          <a href="leaderboard.html" class="btn btn-secondary btn-lg">
+            View Live Leaderboard
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div><strong>PYTHON CODING BATTLE ⚡</strong> — Think Fast. Code Faster.</div>
+      <div>First-Year Inter-Team Coding Competition</div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/register.js"></script>
+
+</body>
+</html>

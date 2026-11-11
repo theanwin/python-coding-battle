@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PYTHON CODING BATTLE ⚡ | Think Fast. Code Faster.</title>
+  <meta name="description" content="A one-hour inter-team Python coding competition where logic, programming skills, and problem-solving come together.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'><path d='M13 2L3 14h9l-1 8 10-12h-9l1-8z'/></svg>">
+  
+  <!-- CSS Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase JS Client via CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- Fixed Navigation Bar -->
+  <div id="site-navbar"></div>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        
+        <div class="hero-pill">
+          <span class="hero-pill-badge">Inter-Team Battle</span>
+          <span>First-Year College Engineering Competition</span>
+        </div>
+
+        <h1 class="hero-title">PYTHON CODING BATTLE</h1>
+        <div class="hero-tagline">Think Fast. Code Faster.</div>
+        
+        <p class="hero-description">
+          A one-hour inter-team Python coding competition where logic, programming skills, and problem-solving come together.
+        </p>
+
+        <!-- 4 Call to Action Buttons -->
+        <div class="hero-cta-group">
+          <a href="register.html" class="btn btn-primary btn-lg">
+            Register Your Team
+          </a>
+          <a href="competition.html" class="btn btn-accent btn-lg">
+            Enter Competition ⚡
+          </a>
+          <a href="leaderboard.html" class="btn btn-secondary btn-lg">
+            Live Leaderboard 🏆
+          </a>
+          <a href="#rounds" class="btn btn-secondary btn-lg">
+            Explore Competition
+          </a>
+        </div>
+
+        <!-- 4 Compact Info Cards Below Hero -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-label">DURATION</span>
+              <div class="stat-card-icon">
+                <i data-lucide="clock" width="18" height="18"></i>
+              </div>
+            </div>
+            <div class="stat-card-value">60 Minutes</div>
+            <div class="stat-card-label">Official Event Duration</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-label">STRUCTURE</span>
+              <div class="stat-card-icon">
+                <i data-lucide="layers" width="18" height="18"></i>
+              </div>
+            </div>
+            <div class="stat-card-value">4 Rounds</div>
+            <div class="stat-card-label">Progressive Challenges</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-label">EVALUATION</span>
+              <div class="stat-card-icon">
+                <i data-lucide="award" width="18" height="18"></i>
+              </div>
+            </div>
+            <div class="stat-card-value">100 Total Points</div>
+            <div class="stat-card-label">Standardized Scoring</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-card-header">
+              <span class="stat-card-label">COLLABORATION</span>
+              <div class="stat-card-icon">
+                <i data-lucide="users" width="18" height="18"></i>
+              </div>
+            </div>
+            <div class="stat-card-value">Teams of 4–5</div>
+            <div class="stat-card-label">Collaborative Coding</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Competition Specifications Card -->
+    <section class="section" style="padding-top: 10px;">
+      <div class="container container-narrow">
+        <div class="card" style="padding: 36px 32px; background: #ffffff;">
+          <div style="text-align: center; margin-bottom: 24px;">
+            <span class="section-label">COMPETITION BRIEF</span>
+            <h2 style="font-size: 1.6rem; letter-spacing: -0.02em; margin-bottom: 6px;">The Ultimate Inter-Team Coding Competition</h2>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">Everything your team needs to know before entering the arena.</p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 30px;">
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px 18px;">
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Duration</span>
+              <div style="font-weight: 700; color: var(--text-primary); margin-top: 2px;">1 Hour (60 Minutes)</div>
+            </div>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px 18px;">
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Participants</span>
+              <div style="font-weight: 700; color: var(--text-primary); margin-top: 2px;">First-Year College Students</div>
+            </div>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px 18px;">
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Team Size</span>
+              <div style="font-weight: 700; color: var(--text-primary); margin-top: 2px;">4–5 Members per Team</div>
+            </div>
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-light); border-radius: var(--radius-md); padding: 14px 18px;">
+              <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Difficulty</span>
+              <div style="font-weight: 700; color: var(--text-primary); margin-top: 2px;">Beginner-Friendly</div>
+            </div>
+          </div>
+
+          <div style="background: var(--accent-subtle); border: 1px solid var(--accent-border); border-radius: var(--radius-md); padding: 16px 20px; text-align: center; margin-bottom: 28px;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-primary); text-transform: uppercase; letter-spacing: 0.05em;">Theme</span>
+            <div style="font-size: 1.05rem; font-weight: 600; color: #312e81; margin-top: 4px;">
+              Python &nbsp;|&nbsp; Logic &nbsp;|&nbsp; Debugging &nbsp;|&nbsp; Speed Coding
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap;">
+            <a href="register.html" class="btn btn-primary">
+              REGISTER TEAM
+            </a>
+            <a href="competition.html" class="btn btn-accent">
+              ENTER COMPETITION
+            </a>
+            <a href="leaderboard.html" class="btn btn-secondary">
+              LIVE LEADERBOARD
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rounds Overview Section -->
+    <section class="section" id="rounds">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-label">CHALLENGE BREAKDOWN</div>
+          <h2 class="section-title">Four Progressive Competition Rounds</h2>
+          <p class="section-description">
+            Each round tests distinct competencies ranging from pure algorithmic reasoning to rapid hands-on Python execution.
+          </p>
+        </div>
+
+        <div class="rounds-grid">
+          
+          <!-- Round 1 -->
+          <div class="round-card">
+            <div class="round-card-top">
+              <span class="round-num">ROUND 1</span>
+              <span class="badge badge-warning">10 Mins • 20 Pts</span>
+            </div>
+            <h3 class="round-card-title">Predict the Output</h3>
+            <p class="round-card-desc">
+              Analyze Python programs containing arithmetic precedence, floor division, string multiplication, boolean logic, and nested conditional structures. Solve mentally without using an online compiler.
+            </p>
+            <div class="round-card-meta">
+              <span>Multiple-Choice Questions</span>
+              <span>No Compiler Allowed</span>
+            </div>
+          </div>
+
+          <!-- Round 2 -->
+          <div class="round-card">
+            <div class="round-card-top">
+              <span class="round-num">ROUND 2</span>
+              <span class="badge badge-indigo">10 Mins • 20 Pts</span>
+            </div>
+            <h3 class="round-card-title">Find the Bug 🐛</h3>
+            <p class="round-card-desc">
+              Identify and fix intentional bugs including missing colons, invalid indentation, incorrect variable names, and bad comparison operators inside the embedded Python code editor.
+            </p>
+            <div class="round-card-meta">
+              <span>Syntax & Logic Debugging</span>
+              <span>Embedded Editor</span>
+            </div>
+          </div>
+
+          <!-- Round 3 -->
+          <div class="round-card">
+            <div class="round-card-top">
+              <span class="round-num">ROUND 3</span>
+              <span class="badge badge-indigo">20 Mins • 30 Pts</span>
+            </div>
+            <h3 class="round-card-title">Speed Coding ⚡</h3>
+            <p class="round-card-desc">
+              Rapid-fire algorithmic challenges: name printer, even/odd checker, basic calculator with division error handling, multiplication tables, and number-guessing simulation evaluated against automated test cases.
+            </p>
+            <div class="round-card-meta">
+              <span>5 Core Challenges</span>
+              <span>Auto Test-Case Scoring</span>
+            </div>
+          </div>
+
+          <!-- Round 4 -->
+          <div class="round-card" style="border-color: #fde68a;">
+            <div class="round-card-top">
+              <span class="round-num" style="color: #b45309;">ROUND 4</span>
+              <span class="badge badge-warning" style="background:#fef3c7;color:#b45309;">10 Mins • 20 Pts + Bonus</span>
+            </div>
+            <h3 class="round-card-title">Final Boss 👑</h3>
+            <p class="round-card-desc">
+              Build a production-grade Student Grade Calculator. Must enforce nested if statements to verify both overall average and individual subject passing thresholds. First correct submission receives bonus points!
+            </p>
+            <div class="round-card-meta">
+              <span>Nested If Requirement</span>
+              <span>Speed Bonus Award</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Schedule Timeline Section -->
+    <section class="section" style="background: var(--bg-primary); border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light);">
+      <div class="container container-narrow">
+        <div class="section-header">
+          <div class="section-label">EVENT TIMELINE</div>
+          <h2 class="section-title">Official 60-Minute Schedule</h2>
+          <p class="section-description">
+            The timer begins separately for each team upon clicking Start Competition.
+          </p>
+        </div>
+
+        <div class="schedule-container">
+          <div class="schedule-row">
+            <div class="schedule-time">00 – 05 min</div>
+            <div>
+              <div class="schedule-title">Introduction & Instructions</div>
+              <div class="schedule-desc">Team login, welcome briefing, rules orientation</div>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <div class="schedule-time">05 – 15 min</div>
+            <div>
+              <div class="schedule-title">Round 1: Predict the Output</div>
+              <div class="schedule-desc">10 Minutes | 20 Points | Mental Execution (No Compiler)</div>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <div class="schedule-time">15 – 25 min</div>
+            <div>
+              <div class="schedule-title">Round 2: Find the Bug 🐛</div>
+              <div class="schedule-desc">10 Minutes | 20 Points | Syntax & Logic Debugging</div>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <div class="schedule-time">25 – 45 min</div>
+            <div>
+              <div class="schedule-title">Round 3: Speed Coding ⚡</div>
+              <div class="schedule-desc">20 Minutes | 30 Points | 5 Algorithmic Challenges</div>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <div class="schedule-time">45 – 55 min</div>
+            <div>
+              <div class="schedule-title">Round 4: Final Boss 👑</div>
+              <div class="schedule-desc">10 Minutes | 20 Points | Student Grade Calculator (Nested If)</div>
+            </div>
+          </div>
+          <div class="schedule-row">
+            <div class="schedule-time">55 – 60 min</div>
+            <div>
+              <div class="schedule-title">Review & Completion</div>
+              <div class="schedule-desc">Final submission verification, audit reviews & podium reveal</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scoring System Summary -->
+    <section class="section">
+      <div class="container container-narrow">
+        <div class="section-header">
+          <div class="section-label">SCORING SYSTEM</div>
+          <h2 class="section-title">Points Distribution</h2>
+          <p class="section-description">Standardized evaluation across all four rounds plus teamwork bonus.</p>
+        </div>
+
+        <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-card);">
+          <table class="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Competition Round</th>
+                <th style="text-align: right;">Maximum Points</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Round 1: Predict the Output</strong></td>
+                <td style="text-align: right; font-family: var(--font-mono); font-weight: 700;">20</td>
+              </tr>
+              <tr>
+                <td><strong>Round 2: Find the Bug 🐛</strong></td>
+                <td style="text-align: right; font-family: var(--font-mono); font-weight: 700;">20</td>
+              </tr>
+              <tr>
+                <td><strong>Round 3: Speed Coding ⚡</strong></td>
+                <td style="text-align: right; font-family: var(--font-mono); font-weight: 700;">30</td>
+              </tr>
+              <tr>
+                <td><strong>Round 4: Final Boss 👑</strong></td>
+                <td style="text-align: right; font-family: var(--font-mono); font-weight: 700;">20</td>
+              </tr>
+              <tr>
+                <td><strong>Teamwork & Speed Bonus</strong></td>
+                <td style="text-align: right; font-family: var(--font-mono); font-weight: 700;">10</td>
+              </tr>
+              <tr style="background: var(--bg-secondary);">
+                <td><strong>TOTAL</strong></td>
+                <td style="text-align: right; font-family: var(--font-mono); font-weight: 800; font-size: 1.15rem; color: var(--accent-primary);">100</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <strong>PYTHON CODING BATTLE ⚡</strong> — Think Fast. Code Faster.
+      </div>
+      <div>
+        Inter-Team Coding Competition Platform &copy; 2026. Built with HTML, CSS & Vanilla JS.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/navbar.js"></script>
+
+</body>
+</html>

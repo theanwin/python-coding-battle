@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Leaderboard | PYTHON CODING BATTLE ⚡</title>
+  <meta name="description" content="Real-time live scoreboard for the Python Coding Battle.">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'><path d='M13 2L3 14h9l-1 8 10-12h-9l1-8z'/></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/leaderboard.css">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div id="site-navbar"></div>
+
+  <main class="main-content">
+    <div class="container" style="padding-top: 36px; padding-bottom: 60px;">
+      
+      <!-- Leaderboard Header Controls -->
+      <div class="leaderboard-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+            <h1 style="font-size: 1.85rem; font-weight: 700; letter-spacing: -0.02em;">Live Leaderboard</h1>
+            <span class="live-indicator">
+              <span class="live-pulse"></span>
+              LIVE UPDATES
+            </span>
+          </div>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">
+            Real-time standings updated automatically via database synchronization.
+          </p>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <input type="text" id="leaderboard-search" class="form-input" placeholder="Search team or department..." style="width: 220px; padding: 7px 12px; font-size: 0.85rem;">
+          <button id="toggle-projector-btn" class="btn btn-secondary btn-sm">
+            Projector View 📺
+          </button>
+          <a href="winners.html" class="btn btn-accent btn-sm">
+            Podium Reveal 👑
+          </a>
+        </div>
+      </div>
+
+      <!-- Teams Counter Pill -->
+      <div style="margin-bottom: 16px;">
+        <span class="badge badge-default" id="leaderboard-count-badge">0 Teams Registered</span>
+      </div>
+
+      <!-- Empty State (Shown when 0 teams exist in DB) -->
+      <div class="empty-state" id="leaderboard-empty-state" style="display: none;">
+        <div class="empty-state-icon">🏆</div>
+        <h3 class="empty-state-title">No Teams Registered Yet</h3>
+        <p class="empty-state-desc">
+          The competition database is currently empty. As soon as teams register, live scores and rankings will appear here automatically.
+        </p>
+        <a href="register.html" class="btn btn-primary">
+          Register the First Team ⚡
+        </a>
+      </div>
+
+      <!-- Leaderboard Table Container -->
+      <div class="leaderboard-table-container" id="leaderboard-table-container">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th style="width: 70px;">Rank</th>
+              <th>Team & Department</th>
+              <th>R1 (20)</th>
+              <th>R2 (20)</th>
+              <th>R3 (30)</th>
+              <th>R4 (20)</th>
+              <th>Bonus</th>
+              <th>Total Score</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard-tbody">
+            <!-- Populated via leaderboard.js -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div><strong>PYTHON CODING BATTLE ⚡</strong> — Live Official Scoreboard</div>
+      <div>Real-time Supabase Database Powered</div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/leaderboard.js"></script>
+
+</body>
+</html>

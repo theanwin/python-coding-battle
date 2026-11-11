@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | PYTHON CODING BATTLE ⚡</title>
+  <meta name="description" content="Secure administrator dashboard for managing teams, monitoring timers, and adjusting scores.">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'><path d='M13 2L3 14h9l-1 8 10-12h-9l1-8z'/></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div id="site-navbar"></div>
+
+  <!-- ============================================================
+       ADMIN LOGIN MODAL GATE (Password empty by default, masked)
+       ============================================================ -->
+  <div class="admin-login-overlay" id="admin-login-modal">
+    <div class="admin-login-card">
+      <div class="admin-lock-icon">🔒</div>
+      <h2 class="admin-login-title">Administrator Portal</h2>
+      <p class="admin-login-desc">Enter authorized credentials to manage the competition.</p>
+
+      <form id="admin-login-form">
+        <div class="form-group" style="text-align: left;">
+          <label class="form-label" for="admin-password-input">Admin Password</label>
+          <input type="password" id="admin-password-input" class="form-input" placeholder="••••••••••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+          Authenticate & Enter Dashboard
+        </button>
+      </form>
+
+      <div style="margin-top: 18px; font-size: 0.8rem; color: var(--text-muted);">
+        Restricted to competition organizers and judges.
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       AUTHENTICATED ADMIN DASHBOARD VIEW
+       ============================================================ -->
+  <main class="main-content" id="admin-dashboard-view" style="display: none;">
+    <div class="container" style="padding-top: 36px; padding-bottom: 60px;">
+      
+      <!-- Admin Header -->
+      <div class="admin-header">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span class="badge badge-indigo">SUPERUSER</span>
+            <span class="badge badge-success">Authenticated</span>
+          </div>
+          <h1 style="font-size: 1.85rem; font-weight: 700; margin-top: 6px;">Administrator Command Center</h1>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button id="admin-reset-all-btn" class="btn btn-danger btn-sm">
+            Reset Competition Scores ⚠️
+          </button>
+          <button id="admin-logout-btn" class="btn btn-secondary btn-sm">
+            Lock & Logout 🚪
+          </button>
+        </div>
+      </div>
+
+      <!-- Overview Stats Grid -->
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <div style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Registered Teams</div>
+          <div class="admin-stat-val" id="admin-stat-registered">0</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Total verified teams</div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div style="font-size: 0.76rem; font-weight: 700; color: var(--accent-primary); text-transform: uppercase;">Active Timers</div>
+          <div class="admin-stat-val" style="color: var(--accent-primary);" id="admin-stat-active">0</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Teams in competition</div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div style="font-size: 0.76rem; font-weight: 700; color: var(--success); text-transform: uppercase;">Completed</div>
+          <div class="admin-stat-val" style="color: var(--success);" id="admin-stat-completed">0</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Finished 60-min cycle</div>
+        </div>
+
+        <div class="admin-stat-card">
+          <div style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Submissions Logged</div>
+          <div class="admin-stat-val" id="admin-stat-subs">0</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">Code & answer attempts</div>
+        </div>
+      </div>
+
+      <!-- Admin Tabs Navigation -->
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" data-tab="teams">Teams Roster</button>
+        <button class="admin-tab-btn" data-tab="timers">Timers Monitor ⏱️</button>
+        <button class="admin-tab-btn" data-tab="submissions">Live Submissions</button>
+        <button class="admin-tab-btn" data-tab="score_adjust">Manual Score Adjuster</button>
+        <button class="admin-tab-btn" data-tab="audit">Score Audit Trail 📋</button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div id="admin-tab-content">
+        <!-- Rendered via admin.js -->
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div><strong>PYTHON CODING BATTLE ⚡</strong> — Administrator Console</div>
+      <div>Audit-Tracked Session &copy; 2026</div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+</html>

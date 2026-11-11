@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Winner Podium | PYTHON CODING BATTLE ⚡</title>
+  <meta name="description" content="Official podium reveal and honors for the Python Coding Battle winners.">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234f46e5'><path d='M13 2L3 14h9l-1 8 10-12h-9l1-8z'/></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/leaderboard.css">
+
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <div id="site-navbar"></div>
+
+  <main class="main-content">
+    <div class="container" style="padding-top: 40px; padding-bottom: 60px; text-align: center;">
+      
+      <span class="badge badge-warning" style="background:#fef3c7;color:#b45309;margin-bottom:12px;">Grand Podium Ceremony</span>
+      <h1 style="font-size: 2.4rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 8px;">
+        Winner Honors & Podium Reveal 👑
+      </h1>
+      <p style="color: var(--text-muted); font-size: 1rem; max-width: 600px; margin: 0 auto 30px;">
+        Celebrating the highest-scoring teams based on verified Python execution and speed.
+      </p>
+
+      <!-- Empty State (Shown if no teams exist) -->
+      <div class="empty-state" id="winners-empty-state" style="display: none; max-width: 500px; margin: 40px auto;">
+        <div class="empty-state-icon">👑</div>
+        <h3 class="empty-state-title">No Podium Standings Yet</h3>
+        <p class="empty-state-desc">
+          Teams must register and submit code across the competition rounds before winners are calculated.
+        </p>
+        <a href="register.html" class="btn btn-primary">
+          Register a Team ⚡
+        </a>
+      </div>
+
+      <!-- Podium Display Container (3 Columns: 2nd, 1st, 3rd) -->
+      <div class="podium-container" id="podium-display-container">
+        <!-- 2nd Place Column -->
+        <div class="podium-column podium-column-2" id="podium-col-2">
+          <!-- Rendered via winners.js -->
+        </div>
+
+        <!-- 1st Place Column -->
+        <div class="podium-column podium-column-1" id="podium-col-1">
+          <!-- Rendered via winners.js -->
+        </div>
+
+        <!-- 3rd Place Column -->
+        <div class="podium-column podium-column-3" id="podium-col-3">
+          <!-- Rendered via winners.js -->
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div style="display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 20px;">
+        <a href="leaderboard.html" class="btn btn-secondary">
+          Full Live Leaderboard 🏆
+        </a>
+        <a href="index.html" class="btn btn-secondary">
+          Back to Homepage
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div><strong>PYTHON CODING BATTLE ⚡</strong> — Think Fast. Code Faster.</div>
+      <div>Official Grand Podium Honours</div>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/winners.js"></script>
+
+</body>
+</html>
